@@ -1,21 +1,63 @@
-const playRound = function (playersel, comsel) {
+const choice = ["rock", "paper", "scissor"];
+
+const getComChoice = () => {
+  return choice[Math.floor(Math.random() * 3)];
+};
+
+const playRound = function (playersel, comsel = getComChoice()) {
   playersel = playersel.toLowerCase();
   comsel = comsel.toLowerCase();
-  if (playersel === "scissor" && comsel !== "rock") {
-    console.log(`${playersel} beat ${comsel},you win`);
-  } else if (playersel === "paper" && comsel !== "scissor") {
-    console.log(`${playersel} beat ${comsel},you win`);
-  } else if (playersel === "rock" && comsel !== "paper") {
-    console.log(`${playersel} beat ${comsel},you win`);
+  if (playersel !== comsel) {
+    if (
+      (playersel === "scissor" && comsel !== "rock") ||
+      (playersel === "paper" && comsel !== "scissor") ||
+      (playersel === "rock" && comsel !== "paper")
+    ) {
+      // console.log(`${playersel} beat ${comsel},you win`);
+      return "player";
+    } else {
+      // console.log(`${comsel} beat ${playersel},you lose`);
+      return "com";
+    }
   } else {
-    console.log(`${comsel} beat ${playersel},you lose`);
+    return "Draw";
   }
 };
 
-// const getComChoice = function
+const game = function () {
+  let playersel = prompt("Please input your choice");
+  while (playersel === null || undefined) {
+    playersel = prompt("Please input your choice");
+  }
+  const winner = playRound(playersel);
+  return winner;
+};
 
-const playerselection = "rock";
-const computerselection = "Paper";
-playRound(playerselection, computerselection);
+let playerScore = 0;
+let comScore = 0;
 
-// console.log(Math.random());
+for (let i = 0; i < 5; i++) {
+  const result = game();
+  if (result !== "Draw") {
+    if (result === "player") {
+      playerScore = ++playerScore;
+    } else {
+      comScore = ++comScore;
+    }
+  } else {
+    console.log("Draw");
+  }
+}
+
+if (playerScore !== comScore) {
+  if (playerScore > comScore) {
+    console.log("player win");
+    console.log("player", playerScore, "com", comScore);
+  } else {
+    console.log("computer win");
+    console.log("player", playerScore, "com", comScore);
+  }
+} else {
+  console.log("no one win ");
+  console.log("player", playerScore, "com", comScore);
+}
