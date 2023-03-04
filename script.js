@@ -1,3 +1,5 @@
+const resultContainer = document.querySelector(".result");
+
 const choice = ["rock", "paper", "scissor"];
 
 const getComChoice = () => {
@@ -26,38 +28,61 @@ const playRound = function (playersel, comsel = getComChoice()) {
 
 const game = function () {
   let playersel = prompt("Please input your choice");
-  while (playersel === null || undefined) {
+  while (playersel === null || undefined || false) {
     playersel = prompt("Please input your choice");
   }
   const winner = playRound(playersel);
   return winner;
 };
 
+const Showresult = function (win, winnertag, playertag, comtag) {
+  winnertag.textContent = win;
+
+  resultContainer.appendChild(winnertag);
+  resultContainer.appendChild(playertag);
+  resultContainer.appendChild(comtag);
+};
+
 let playerScore = 0;
 let comScore = 0;
 
-for (let i = 0; i < 5; i++) {
-  const result = game();
-  if (result !== "Draw") {
-    if (result === "player") {
-      playerScore = ++playerScore;
-    } else {
-      comScore = ++comScore;
-    }
-  } else {
-    console.log("Draw");
-  }
-}
+const gameStart = function (e) {
+  if (e.target.classList.contains("btn")) {
+    //
 
-if (playerScore !== comScore) {
-  if (playerScore > comScore) {
-    console.log("player win");
-    console.log("player", playerScore, "com", comScore);
-  } else {
-    console.log("computer win");
-    console.log("player", playerScore, "com", comScore);
+    //
+    const player = e.target.textContent;
+    const result = playRound(player);
+    if (result !== "Draw") {
+      if (result === "player") {
+        playerScore = ++playerScore;
+      } else {
+        comScore = ++comScore;
+      }
+    } else {
+      // console.log("Draw");
+    }
+    // }
+    if (playerScore === 5 || comScore === 5) {
+      const winner = document.createElement("h1");
+      const playerResult = document.createElement("h2");
+      const comResult = document.createElement("h2");
+
+      playerResult.innerText = `player Scores = ${playerScore}`;
+      comResult.innerText = `Computer Scores = ${comScore}`;
+
+      // if (playerScore !== comScore) {
+      if (playerScore > comScore) {
+        Showresult("player Win", winner, playerResult, comResult);
+      } else {
+        Showresult("Computer Win", winner, playerResult, comResult);
+      }
+      // } else {
+      //   console.log("no one win ");
+      //   console.log("player", playerScore, "com", comScore);
+      // }
+    }
   }
-} else {
-  console.log("no one win ");
-  console.log("player", playerScore, "com", comScore);
-}
+};
+
+window.addEventListener("click", gameStart);
