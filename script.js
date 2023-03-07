@@ -43,13 +43,33 @@ const Showresult = function (win, winnertag, playertag, comtag) {
   resultContainer.appendChild(comtag);
 };
 
-let playerScore = 0;
+const Deleteresult = function (winnertag, playertag, comtag) {
+  winnertag.textContent = "";
+  playertag.textContent = "";
+  comtag.textContent = "";
+};
+
+let playerScore = 4;
 let comScore = 0;
 
+const manageResult = function (player, com) {
+  if (player >= 5 || com >= 5) {
+    while (resultContainer.hasChildNodes()) {
+      resultContainer.removeChild(resultContainer.firstChild);
+    }
+    playerScore = comScore = 0;
+  }
+};
+
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn")) {
+    manageResult(playerScore, comScore);
+  }
+});
 const gameStart = function (e) {
   if (e.target.classList.contains("btn")) {
     //
-
+    manageResult(playerScore, comScore);
     //
     const player = e.target.textContent;
     const result = playRound(player);
@@ -59,28 +79,25 @@ const gameStart = function (e) {
       } else {
         comScore = ++comScore;
       }
-    } else {
-      // console.log("Draw");
-    }
-    // }
-    if (playerScore === 5 || comScore === 5) {
-      const winner = document.createElement("h1");
-      const playerResult = document.createElement("h2");
-      const comResult = document.createElement("h2");
-
-      playerResult.innerText = `player Scores = ${playerScore}`;
-      comResult.innerText = `Computer Scores = ${comScore}`;
-
-      // if (playerScore !== comScore) {
-      if (playerScore > comScore) {
-        Showresult("player Win", winner, playerResult, comResult);
-      } else {
-        Showresult("Computer Win", winner, playerResult, comResult);
-      }
       // } else {
-      //   console.log("no one win ");
-      //   console.log("player", playerScore, "com", comScore);
+      //   // console.log("Draw");
       // }
+
+      if (playerScore >= 5 || comScore >= 5) {
+        //Create Elements
+        const winner = document.createElement("h1");
+        const playerResult = document.createElement("h2");
+        const comResult = document.createElement("h2");
+
+        playerResult.innerText = `player Scores = ${playerScore}`;
+        comResult.innerText = `Computer Scores = ${comScore}`;
+
+        if (playerScore > comScore) {
+          Showresult("player Win", winner, playerResult, comResult);
+        } else {
+          Showresult("Computer Win", winner, playerResult, comResult);
+        }
+      }
     }
   }
 };
